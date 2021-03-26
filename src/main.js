@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime'
+
 import './firebase';
 
 import React from 'react';
