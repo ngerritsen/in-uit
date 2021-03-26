@@ -1,24 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 
 import MainView from './MainView';
 import Header from './Header';
 import Loader from './Loader';
 import Login from './Login';
-import { getTheme, setGobalThemeStyling } from '../helpers/theme';
+import { getTheme } from '../helpers/theme';
 
 const App = ({
   authenticationInitialized,
   initialized,
-  loggedIn,
-  useDarkMode,
+  loggedIn
 }) => {
-  useEffect(() => {
-    setGobalThemeStyling(getTheme());
-  }, [useDarkMode]);
-
   return (
     <ThemeProvider theme={getTheme()}>
       <div>
@@ -37,6 +32,7 @@ const App = ({
           })()}
         </div>
       </div>
+      <GlobalStyle />
     </ThemeProvider>
   );
 };
@@ -47,6 +43,27 @@ App.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   useDarkMode: PropTypes.bool.isRequired,
 };
+
+const GlobalStyle = createGlobalStyle`
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-size: 1.5rem;
+    margin: 0;
+    font-family: 'Open Sans', Arial, sans-serif;
+    color: ${props => props.theme.colors.foreground};
+    background-color: ${props => props.theme.colors.backgroundSubtle};
+  }
+`;
 
 function mapStateToProps(state) {
   return {

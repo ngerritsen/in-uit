@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import './firebase';
 
 import React from 'react';
@@ -8,9 +6,6 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import App from './components/App';
-import { setGlobalStyling } from './helpers/theme';
-
-setGlobalStyling();
 
 const rootEl = document.getElementById('root');
 
