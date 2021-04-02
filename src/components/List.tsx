@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Item from "./Item";
 import CategoryHeading from "./CategoryHeading";
@@ -49,6 +49,7 @@ const List = ({ itemType, responsible }: ListProps) => {
                 itemType={item.itemType}
                 category={item.category}
                 dirty={item.dirty}
+                checked={item.checked}
               />
             )),
           ],

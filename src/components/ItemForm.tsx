@@ -22,6 +22,7 @@ type ItemFormProps = {
   responsible: Responsible;
   onExit: () => void;
   amount?: number;
+  checked?: boolean;
 };
 
 type ItemFormValues = {
@@ -37,6 +38,7 @@ const ItemForm = ({
   amount,
   itemType,
   responsible,
+  checked,
   onExit,
 }: ItemFormProps): JSX.Element => {
   const editMode = Boolean(id);
@@ -61,6 +63,7 @@ const ItemForm = ({
             title: values.title,
             amount: Number(values.amount),
             category: values.category,
+            checked: checked || false,
           })
         );
         onExit();

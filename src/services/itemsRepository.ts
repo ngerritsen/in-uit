@@ -34,5 +34,6 @@ function serializeItem(item: Item): Item {
     itemType: item.itemType,
     responsible: item.responsible,
     title: item.title,
+    checked: Boolean(item.checked),
   };
 }

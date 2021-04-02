@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 
@@ -8,6 +9,9 @@ import { toCurrency } from "../helpers/formatting";
 import ToggleContent from "./ToggleContent";
 import Modal from "./Modal";
 import ItemForm from "./ItemForm";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { editItem } from "../actions";
 
 type ItemProps = {
   amount: number;
@@ -18,6 +22,7 @@ type ItemProps = {
   id?: string;
   dirty?: boolean;
   title: string;
+  checked?: boolean;
 };
 
 const Item = ({
@@ -29,10 +34,33 @@ const Item = ({
   id,
   itemType,
   responsible,
+  checked,
 }: ItemProps) => {
+  const dispatch = useDispatch();
+
   return (
     <ItemContainer>
       <ItemContent dirty={dirty} calculated={calculated}>
+        {!calculated && itemType !== ItemType.Saldo && (
+          <ItemCheckIcon
+            checked={checked}
+            onClick={() =>
+              dispatch(
+                editItem({
+                  id,
+                  responsible,
+                  itemType,
+                  title,
+                  category,
+                  amount,
+                  checked: !checked,
+                })
+              )
+            }
+          >
+            <FontAwesomeIcon icon={checked ? faCheckCircle : faCircle} />
+          </ItemCheckIcon>
+        )}
         <ItemTitle itemType={itemType}>{title}</ItemTitle>
         <ItemAmount
           negative={amount < 0}
@@ -84,6 +112,18 @@ const ItemContent = styled.div<ItemContentProps>`
   align-items: center;
   padding: 1.2rem 0;
   color: ${(props) => (props.calculated ? props.theme.colors.grey : "inherit")};
+`;
+
+type ItemCheckIconProps = {
+  checked?: boolean;
+};
+
+const ItemCheckIcon = styled.div<ItemCheckIconProps>`
+  color: ${(props) =>
+    props.checked ? props.theme.colors.blue : props.theme.colors.grey};
+  margin-right: ${(props) => props.theme.sizes.sm};
+  font-size: 1.1em;
+  cursor: pointer;
 `;
 
 const ItemTitle = styled.div`
