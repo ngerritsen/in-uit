@@ -1,8 +1,11 @@
 import firebase from "firebase";
+import { Observable, Observer } from "rxjs";
 
-export function onLoginStateChange(callback: (loggedIn: boolean) => void) {
-  firebase.auth().onAuthStateChanged((user) => {
-    callback(Boolean(user));
+export function onLoginStateChange(): Observable<boolean> {
+  return new Observable((observer: Observer<boolean>) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      observer.next(Boolean(user));
+    });
   });
 }
 

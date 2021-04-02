@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Formik, Field, FormikErrors, Form, FormikProps } from "formik";
+import { Formik, FormikErrors, Form, FormikProps } from "formik";
 
 import { login } from "../actions";
 import Title from "./Title";
@@ -28,7 +28,8 @@ const Login = () => {
           onSubmit={({ email, password }) => {
             dispatch(login({ email, password }));
           }}
-          render={({ isValid, dirty }: FormikProps<LoginFormValues>) => (
+        >
+          {({ isValid, dirty }: FormikProps<LoginFormValues>) => (
             <Form>
               <Section>
                 <Input type="text" name="email" label="E-mail" />
@@ -41,7 +42,7 @@ const Login = () => {
               </Button>
             </Form>
           )}
-        />
+        </Formik>
       </Container>
     </PageSection>
   );

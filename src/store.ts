@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
 
-import authenticationMiddleware from "./middlewares/authentication";
-import itemsMiddleware from "./middlewares/items";
 import * as reducers from "./reducers";
-import { Middleware } from "redux";
+import { createEpicMiddleware } from "redux-observable";
+import rootEpic from "./epics";
 
-const middlewares: Middleware[] = [authenticationMiddleware, itemsMiddleware];
+const epicMiddleware = createEpicMiddleware();
+const middlewares = [epicMiddleware];
 
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV !== "production") {
@@ -21,6 +21,8 @@ const store = configureStore({
   reducer: reducers,
   middleware: middlewares,
 });
+
+epicMiddleware.run(rootEpic);
 
 export type RootState = ReturnType<typeof store.getState>;
 export default store;

@@ -9,6 +9,7 @@ export type Item = {
   dirty?: boolean;
   itemType: ItemType;
   title: string;
+  checked?: boolean;
   _previousVersion?: Item;
 };
 

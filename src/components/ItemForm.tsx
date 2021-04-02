@@ -68,7 +68,8 @@ const ItemForm = ({
         );
         onExit();
       }}
-      render={({ isValid, dirty }) => (
+    >
+      {({ isValid, dirty }) => (
         <Form>
           <Title>{generateTitle(responsible, itemType, editMode)}</Title>
           <Section>
@@ -109,7 +110,7 @@ const ItemForm = ({
           )}
         </Form>
       )}
-    />
+    </Formik>
   );
 };
 
