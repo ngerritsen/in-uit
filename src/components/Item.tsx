@@ -124,6 +124,11 @@ const ItemCheckIcon = styled.div<ItemCheckIconProps>`
   margin-right: ${(props) => props.theme.sizes.sm};
   font-size: 1.1em;
   cursor: pointer;
+
+  &:hover {
+    color: ${(props) =>
+      props.checked ? props.theme.colors.grey : props.theme.colors.blue};
+  }
 `;
 
 const ItemTitle = styled.div`
