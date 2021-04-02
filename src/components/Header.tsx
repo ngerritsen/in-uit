@@ -12,6 +12,8 @@ import {
   getIsLoggedIn,
   getIsInitialized,
 } from "../selectors";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import { darken, lighten } from "polished";
 
 const Header = () => {
   const isDirty = useSelector(getHasDirtyItems);
@@ -25,7 +27,7 @@ const Header = () => {
         <Container>
           <HeaderContent>
             <LogoContainer>
-              <FontAwesomeIcon icon={faDollarSign} />
+              <FontAwesomeIcon icon={faCoins} />
             </LogoContainer>
             <HeaderTitle>In & uit</HeaderTitle>
             {isLoggedIn && isInitialized && (
@@ -42,14 +44,14 @@ const Header = () => {
 };
 
 const LogoContainer = styled.span`
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-right: 1.2rem;
   float: left;
   background-color: ${(props) => props.theme.colors.coin};
-  width: 3rem;
-  height: 3rem;
+  width: 3.6rem;
+  height: 3.6rem;
   border-radius: 3rem;
-  color: ${(props) => props.theme.colors.white};
+  color: ${(props) => lighten(0.1, props.theme.colors.black)};
   display: flex;
   align-items: center;
   justify-content: center;

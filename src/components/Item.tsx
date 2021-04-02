@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
@@ -13,6 +13,8 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import { editItem } from "../actions";
 
+const DIRTY_TIMEOUT = 250;
+
 type ItemProps = {
   amount: number;
   itemType: ItemType;
@@ -23,8 +25,8 @@ type ItemProps = {
   dirty?: boolean;
   title: string;
   checked?: boolean;
+  additional?: boolean;
 };
-
 const Item = ({
   amount,
   calculated,
@@ -35,13 +37,36 @@ const Item = ({
   itemType,
   responsible,
   checked,
+  additional,
 }: ItemProps) => {
   const dispatch = useDispatch();
+  const [showDirty, setShowDirty] = useState<boolean>(false);
+  const [dirtyTimeout, setDirtyTimeout] = useState(null);
+
+  useEffect(() => {
+    clearTimeout(dirtyTimeout);
+
+    if (dirty && !showDirty) {
+      setDirtyTimeout(
+        setTimeout(() => {
+          setShowDirty(true);
+        }, DIRTY_TIMEOUT)
+      );
+    }
+
+    if (!dirty) {
+      setShowDirty(false);
+    }
+  }, [dirty]);
 
   return (
     <ItemContainer>
-      <ItemContent dirty={dirty} calculated={calculated}>
-        {!calculated && itemType !== ItemType.Saldo && (
+      <ItemContent
+        dirty={showDirty}
+        calculated={calculated}
+        additional={additional}
+      >
+        {!calculated && itemType === ItemType.Expense && (
           <ItemCheckIcon
             checked={checked}
             onClick={() =>
@@ -62,11 +87,7 @@ const Item = ({
           </ItemCheckIcon>
         )}
         <ItemTitle itemType={itemType}>{title}</ItemTitle>
-        <ItemAmount
-          negative={amount < 0}
-          itemType={itemType}
-          calculated={calculated}
-        >
+        <ItemAmount negative={amount < 0} itemType={itemType}>
           {toCurrency(amount)}
         </ItemAmount>
         {itemType !== ItemType.Saldo && !calculated && (
@@ -91,7 +112,6 @@ const Item = ({
             )}
           />
         )}
-        {(itemType === ItemType.Saldo || calculated) && <ItemEdit />}
       </ItemContent>
     </ItemContainer>
   );
@@ -104,14 +124,17 @@ const ItemContainer = styled.div`
 type ItemContentProps = {
   dirty?: boolean;
   calculated?: boolean;
+  additional?: boolean;
 };
 
 const ItemContent = styled.div<ItemContentProps>`
-  opacity: ${(props) => (props.dirty ? 0.5 : 1)};
+  opacity: ${(props) => (props.dirty ? 0.6 : 1)};
+  transition: opacity 0.2 ease;
   display: flex;
   align-items: center;
   padding: 1.2rem 0;
   color: ${(props) => (props.calculated ? props.theme.colors.grey : "inherit")};
+  font-style: ${(props) => (props.additional ? "italic" : "inherit")};
 `;
 
 type ItemCheckIconProps = {
@@ -124,10 +147,6 @@ const ItemCheckIcon = styled.div<ItemCheckIconProps>`
   margin-right: ${(props) => props.theme.sizes.sm};
   font-size: 1.1em;
   cursor: pointer;
-
-  &:hover {
-    color: ${(props) =>
-      props.checked ? props.theme.colors.grey : props.theme.colors.blue};
   }
 `;
 
@@ -136,17 +155,14 @@ const ItemTitle = styled.div`
   font-weight: ${(props) =>
     props.itemType === ItemType.Saldo ? "bold" : "regular"};
   margin-right: ${(props) => props.theme.sizes.sm};
-  cursor: pointer;
 `;
 
 type ItemAmountProps = {
-  calculated?: boolean;
   negative?: boolean;
 };
 
 const ItemAmount = styled.div<ItemAmountProps>`
   margin-right: ${(props) => props.theme.sizes.sm};
-  opacity: ${(props) => (props.calculated ? 0.7 : 1)};
   font-weight: ${(props) =>
     props.itemType === ItemType.Saldo ? "bold" : "regular"};
   color: ${(props) => {
@@ -165,9 +181,6 @@ const ItemAmount = styled.div<ItemAmountProps>`
 
 const ItemEdit = styled.div`
   color: ${(props) => props.theme.colors.grey};
-  position: relative;
-  top: 0.15rem;
-  width: 2.2rem;
 
   &:focus,
   &:hover {

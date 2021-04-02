@@ -1,7 +1,7 @@
 import { RootState } from "./store";
 import * as helpers from "./helpers/items";
 import { ItemType, Responsible } from "./constants";
-import { Item, Category } from "./types";
+import { Item, Category, Summary } from "./types";
 import { calculateSummary } from "./helpers/calculate";
 
 export const getItems = (state: RootState): Item[] => state.items.items;
@@ -28,7 +28,7 @@ export const getSummmary = (
   state: RootState,
   itemType: ItemType,
   responsible: Responsible
-): Record<string, number> | null =>
+): Summary | null =>
   itemType === ItemType.Expense
     ? calculateSummary(getItems(state), responsible)
     : null;

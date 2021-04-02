@@ -1,7 +1,12 @@
 import { Responsible, ItemType } from "../constants";
-import { Item } from "../types";
+import { Item, Summary } from "../types";
 
-export function calculateSummary(items: Item[], responsible: Responsible) {
+type Investments = Record<Responsible.Man | Responsible.Woman, number>;
+
+export function calculateSummary(
+  items: Item[],
+  responsible: Responsible
+): Summary {
   const saldos = calculateInitialSaldos(items);
   const saldo = saldos[responsible];
   const investments = calculateInvestments(saldos);
@@ -13,7 +18,19 @@ export function calculateSummary(items: Item[], responsible: Responsible) {
     investmentMan: investments[Responsible.Man],
     investmentWoman: investments[Responsible.Woman],
     saldo: calculateFinalSaldo(saldo, investments, responsible),
+    toPay: calculateToPay(items, responsible),
   };
+}
+
+function calculateToPay(items: Item[], responsible: Responsible): number {
+  return items
+    .filter(
+      (item) =>
+        item.responsible === responsible &&
+        !item.checked &&
+        item.itemType === ItemType.Expense
+    )
+    .reduce((total, item) => total + item.amount, 0);
 }
 
 function calculateTotal(
@@ -46,7 +63,11 @@ function calculateInitialSaldo(
   );
 }
 
-function calculateFinalSaldo(saldo, investments, responsible) {
+function calculateFinalSaldo(
+  saldo: number,
+  investments: Investments,
+  responsible: Responsible
+): number {
   if (responsible === Responsible.Shared) {
     return (
       saldo + investments[Responsible.Man] + investments[Responsible.Woman]
@@ -56,14 +77,19 @@ function calculateFinalSaldo(saldo, investments, responsible) {
   return saldo - investments[responsible];
 }
 
-function calculateInvestments(saldos) {
+function calculateInvestments(
+  saldos: Record<Responsible, number>
+): Investments {
   return {
     [Responsible.Man]: calculateInvestment(saldos, Responsible.Man),
     [Responsible.Woman]: calculateInvestment(saldos, Responsible.Woman),
   };
 }
 
-function calculateInvestment(saldos, responsible) {
+function calculateInvestment(
+  saldos: Record<Responsible, number>,
+  responsible: Responsible
+): number {
   const totalSaldo = saldos[Responsible.Man] + saldos[Responsible.Woman];
   const sharedInvestmentNeeded = getNegativeAmount(saldos[Responsible.Shared]);
   const saldo = saldos[responsible];
@@ -81,6 +107,6 @@ function calculateInvestment(saldos, responsible) {
   return investment;
 }
 
-function getNegativeAmount(number) {
+function getNegativeAmount(number: number): number {
   return number < 0 ? number * -1 : 0;
 }

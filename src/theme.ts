@@ -10,6 +10,7 @@ const getSize = (n: number): string => (BASE_SIZE * n).toFixed(1) + "rem";
 export const light: Theme = {
   colors: {
     white: WHITE,
+    black: BLACK,
     background: WHITE,
     backgroundSubtle: lighten(0.1, "#d1d8e0"),
     foreground: lighten(0.1, BLACK),

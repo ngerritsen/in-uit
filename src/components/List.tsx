@@ -56,7 +56,7 @@ const List = ({ itemType, responsible }: ListProps) => {
           []
         )}
         {summary && (
-          <React.Fragment>
+          <>
             <CategoryHeading title="Samenvatting" />
             <Item
               itemType={ItemType.Income}
@@ -66,22 +66,22 @@ const List = ({ itemType, responsible }: ListProps) => {
               calculated
             />
             {responsible === Responsible.Shared && (
-              <Item
-                itemType={ItemType.Income}
-                amount={summary.investmentMan}
-                title="Inleg Niels"
-                responsible={responsible}
-                calculated
-              />
-            )}
-            {responsible === Responsible.Shared && (
-              <Item
-                itemType={ItemType.Income}
-                amount={summary.investmentWoman}
-                title="Inleg Peggy"
-                responsible={responsible}
-                calculated
-              />
+              <>
+                <Item
+                  itemType={ItemType.Income}
+                  amount={summary.investmentMan}
+                  title="Inleg Niels"
+                  responsible={responsible}
+                  calculated
+                />
+                <Item
+                  itemType={ItemType.Income}
+                  amount={summary.investmentWoman}
+                  title="Inleg Peggy"
+                  responsible={responsible}
+                  calculated
+                />
+              </>
             )}
             <Item
               itemType={ItemType.Expense}
@@ -90,6 +90,16 @@ const List = ({ itemType, responsible }: ListProps) => {
               responsible={responsible}
               calculated
             />
+            {summary.toPay && summary.toPay !== summary.totalExpense && (
+              <Item
+                itemType={ItemType.Expense}
+                amount={summary.toPay}
+                title="- &nbsp; Nog te betalen"
+                responsible={responsible}
+                calculated
+                additional
+              />
+            )}
             {responsible !== Responsible.Shared && (
               <Item
                 itemType={ItemType.Expense}
@@ -105,7 +115,7 @@ const List = ({ itemType, responsible }: ListProps) => {
               amount={summary.saldo}
               responsible={responsible}
             />
-          </React.Fragment>
+          </>
         )}
       </Section>
       <Section size="xs">

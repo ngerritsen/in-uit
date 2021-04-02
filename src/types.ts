@@ -27,3 +27,13 @@ export interface Theme {
 export interface StyledProps {
   theme: Theme;
 }
+
+export type Summary = {
+  investment: number;
+  totalIncome: number;
+  totalExpense: number;
+  investmentMan: number;
+  investmentWoman: number;
+  saldo: number;
+  toPay: number;
+};
