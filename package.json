@@ -1,7 +1,7 @@
 {
-  "name": "income-expenses",
+  "name": "in-uit",
   "version": "1.0.0",
-  "description": "Income expense balance",
+  "description": "A personal finance management system.",
   "main": "index.js",
   "scripts": {
     "start": "parcel src/index.html",
