@@ -9,5 +9,6 @@ export default combineEpics(
   itemEpics.removeItemEpic,
   authenticationEpics.authenticationStateChangeEpic,
   authenticationEpics.loginEpic,
-  authenticationEpics.logoutEpic
+  authenticationEpics.logoutEpic,
+  authenticationEpics.initiallyLoggedInEpic
 );

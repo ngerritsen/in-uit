@@ -92,22 +92,19 @@ const ItemForm = ({
               <ButtonPairButton>
                 <Button disabled={!isValid && dirty}>Opslaan</Button>
               </ButtonPairButton>
-              <ButtonPairButton>
-                <Button onClick={onExit} type="button" warning>
-                  Annuleren
-                </Button>
-              </ButtonPairButton>
+              {editMode && (
+                <ButtonPairButton>
+                  <Button
+                    onClick={() => dispatch(removeItem(id))}
+                    type="button"
+                    danger
+                  >
+                    Verwijderen
+                  </Button>
+                </ButtonPairButton>
+              )}
             </ButtonPair>
           </Section>
-          {editMode && (
-            <Button
-              onClick={() => dispatch(removeItem(id))}
-              type="button"
-              danger
-            >
-              Verwijderen
-            </Button>
-          )}
         </Form>
       )}
     </Formik>

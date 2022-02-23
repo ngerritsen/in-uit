@@ -23,18 +23,14 @@ const App = () => {
 
   return (
     <ThemeProvider theme={getTheme(useDarkMode)}>
-      <div>
-        <Header />
-        <div className="container">
-          {(() => {
-            if (!isLoggedIn) {
-              return <Login />;
-            }
+      <Header />
+      {(() => {
+        if (!isLoggedIn) {
+          return <Login />;
+        }
 
-            return <MainView />;
-          })()}
-        </div>
-      </div>
+        return <MainView />;
+      })()}
       <GlobalStyle />
     </ThemeProvider>
   );

@@ -4,26 +4,42 @@ import ReactDOM from "react-dom";
 
 import Container from "./Container";
 import PageSection from "./PageSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 type ModalProps = {
-  isOpen: boolean;
+  close: () => void;
   children: JSX.Element | JSX.Element[];
 };
 
-const Modal = ({ isOpen, children }: ModalProps) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  return ReactDOM.createPortal(
+const Modal = ({ children, close }: ModalProps) =>
+  ReactDOM.createPortal(
     <ModalOverlay>
       <PageSection>
+        <CloseButton onClick={close}>
+          <FontAwesomeIcon size="lg" icon={faTimes} />
+        </CloseButton>
         <Container narrow>{children}</Container>
       </PageSection>
     </ModalOverlay>,
     document.getElementById("modal-root")
   );
-};
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  cursor: pointer;
+  right: ${(props) => props.theme.sizes.sm};
+  top: ${(props) => props.theme.sizes.sm};
+  padding: ${(props) => props.theme.sizes.sm};
+  color: ${(props) => props.theme.colors.foreground};
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 const ModalOverlay = styled.div`
   display: flex;

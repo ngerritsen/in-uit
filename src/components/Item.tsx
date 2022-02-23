@@ -98,7 +98,7 @@ const Item = ({
               </ItemEdit>
             )}
             content={({ close }) => (
-              <Modal isOpen>
+              <Modal close={close}>
                 <ItemForm
                   title={title}
                   id={id}

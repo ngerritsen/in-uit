@@ -10,7 +10,7 @@ import { getIsLoggedIn } from "../selectors";
 import * as authenticationService from "../services/authenticationService";
 import * as actions from "../actions";
 import { RootState } from "../store";
-import { EMPTY, from, of } from "rxjs";
+import { empty, EMPTY, from, of } from "rxjs";
 import { Action } from "redux";
 import { PayloadAction } from "@reduxjs/toolkit";
 
@@ -32,6 +32,11 @@ export const authenticationStateChangeEpic = (
       return EMPTY;
     })
   );
+
+export const initiallyLoggedInEpic = (
+  _: unknown,
+  state$: StateObservable<RootState>
+) => (getIsLoggedIn(state$.value) ? of(actions.getAllItems()) : empty());
 
 export const loginEpic = (action$: ActionsObservable<Action>) =>
   action$.pipe(

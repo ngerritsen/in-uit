@@ -126,7 +126,7 @@ const List = ({ itemType, responsible }: ListProps) => {
             </Button>
           )}
           content={({ close }) => (
-            <Modal isOpen>
+            <Modal close={close}>
               <ItemForm
                 responsible={responsible}
                 itemType={itemType}
