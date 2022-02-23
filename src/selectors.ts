@@ -5,17 +5,21 @@ import { Item, Category, Summary } from "./types";
 import { calculateSummary } from "./helpers/calculate";
 
 export const getItems = (state: RootState): Item[] => state.items.items;
+
 export const getHasDirtyItems = (state: RootState): boolean =>
   Boolean(state.items.items.some((item) => item.dirty));
 
-export const getIsInitialized = (state: RootState): boolean =>
-  state.items.initialized;
-
-export const getIsAuthenticationInitialized = (state: RootState): boolean =>
-  state.authentication.initialized;
-
 export const getIsLoggedIn = (state: RootState): boolean =>
   state.authentication.loggedIn;
+
+export const getIsLoggingIn = (state: RootState): boolean =>
+  state.authentication.loggingIn;
+
+export const getIsLoggingOut = (state: RootState): boolean =>
+  state.authentication.loggingOut;
+
+export const getLoginError = (state: RootState): string =>
+  state.authentication.loginError;
 
 export const getGroupedItems = (
   state: RootState,

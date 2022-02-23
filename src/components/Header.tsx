@@ -2,23 +2,17 @@ import styled from "styled-components";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDollarSign } from "@fortawesome/free-solid-svg-icons/faDollarSign";
 import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 
 import Container from "./Container";
-import {
-  getHasDirtyItems,
-  getIsLoggedIn,
-  getIsInitialized,
-} from "../selectors";
+import { getHasDirtyItems, getIsLoggedIn } from "../selectors";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
-import { darken, lighten } from "polished";
+import { lighten } from "polished";
 
 const Header = () => {
   const isDirty = useSelector(getHasDirtyItems);
   const isLoggedIn = useSelector(getIsLoggedIn);
-  const isInitialized = useSelector(getIsInitialized);
 
   return (
     <div>
@@ -30,7 +24,7 @@ const Header = () => {
               <FontAwesomeIcon icon={faCoins} />
             </LogoContainer>
             <HeaderTitle>In & uit</HeaderTitle>
-            {isLoggedIn && isInitialized && (
+            {isLoggedIn && (
               <Status dirty={isDirty}>
                 {isDirty && <FontAwesomeIcon icon={faSync} spin />}
                 {!isDirty && <FontAwesomeIcon icon={faCheck} />}

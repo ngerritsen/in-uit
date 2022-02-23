@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Formik, Field, Form, FormikErrors } from "formik";
+import { Formik, Form, FormikErrors } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { CATEGORIES, DEFAULT_CATEGORY } from "../constants";

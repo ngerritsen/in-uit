@@ -1,13 +1,12 @@
 import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import {
   catchError,
-  map,
   mapTo,
   mergeMap,
   mergeMapTo,
   withLatestFrom,
 } from "rxjs/operators";
-import { getIsAuthenticationInitialized, getIsLoggedIn } from "../selectors";
+import { getIsLoggedIn } from "../selectors";
 import * as authenticationService from "../services/authenticationService";
 import * as actions from "../actions";
 import { RootState } from "../store";
@@ -16,7 +15,7 @@ import { Action } from "redux";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const authenticationStateChangeEpic = (
-  _,
+  _: unknown,
   state$: StateObservable<RootState>
 ) =>
   authenticationService.onLoginStateChange().pipe(
@@ -26,10 +25,7 @@ export const authenticationStateChangeEpic = (
         return of(actions.loginSucceeded(), actions.getAllItems());
       }
 
-      if (
-        !loggedIn &&
-        (getIsLoggedIn(state) || !getIsAuthenticationInitialized(state))
-      ) {
+      if (!loggedIn && getIsLoggedIn(state)) {
         return of(actions.logoutSucceeded());
       }
 
@@ -44,7 +40,7 @@ export const loginEpic = (action$: ActionsObservable<Action>) =>
       ({ payload: { email, password } }: PayloadAction<actions.LoginPayload>) =>
         from(authenticationService.login(email, password)).pipe(
           mergeMapTo(of(actions.loginSucceeded(), actions.getAllItems())),
-          catchError(() => of(actions.loginFailed()))
+          catchError((error) => of(actions.loginFailed(error)))
         )
     )
   );
@@ -55,7 +51,7 @@ export const logoutEpic = (action$: ActionsObservable<Action>) =>
     mergeMap(() =>
       from(authenticationService.logout()).pipe(
         mapTo(actions.logoutSucceeded()),
-        catchError(() => of(actions.logoutFailed()))
+        catchError((error) => of(actions.logoutFailed(error)))
       )
     )
   );

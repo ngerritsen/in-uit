@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import MainView from "./MainView";
 import Header from "./Header";
-import Loader from "./Loader";
 import Login from "./Login";
 import { getTheme, isInDarkMode, onDarkModeChange } from "../helpers/theme";
-import {
-  getIsLoggedIn,
-  getIsInitialized,
-  getIsAuthenticationInitialized,
-} from "../selectors";
+import { getIsLoggedIn } from "../selectors";
 import { Theme } from "../types";
 
 const App = () => {
   const [useDarkMode, setUseDarkMode] = useState(isInDarkMode());
   const isLoggedIn = useSelector(getIsLoggedIn);
-  const isInitialized = useSelector(getIsInitialized);
-  const isAuthenticationInitialized = useSelector(
-    getIsAuthenticationInitialized
-  );
 
   useEffect(() => {
     onDarkModeChange((shouldUseDarkMode: boolean) => {
@@ -37,12 +27,8 @@ const App = () => {
         <Header />
         <div className="container">
           {(() => {
-            if (isAuthenticationInitialized && !isLoggedIn) {
+            if (!isLoggedIn) {
               return <Login />;
-            }
-
-            if (!(isInitialized && isAuthenticationInitialized)) {
-              return <Loader />;
             }
 
             return <MainView />;

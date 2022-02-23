@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, FormikErrors, Form, FormikProps } from "formik";
 
 import { login } from "../actions";
@@ -9,6 +9,11 @@ import Container from "./Container";
 import Button from "./Button";
 import Input from "./Input";
 import Section from "./Section";
+import { getIsLoggingIn, getLoginError } from "../selectors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons/faCircleNotch";
+import ButtonIcon from "./ButtonIcon";
+import ErrorMessage from "./ErrorMessage";
 
 type LoginFormValues = {
   email: string;
@@ -17,6 +22,8 @@ type LoginFormValues = {
 
 const Login = () => {
   const dispatch = useDispatch();
+  const isLoggingIn = useSelector(getIsLoggingIn);
+  const loginError = useSelector(getLoginError);
 
   return (
     <PageSection>
@@ -37,7 +44,16 @@ const Login = () => {
               <Section size="md">
                 <Input type="password" name="password" label="Wachtwoord" />
               </Section>
-              <Button type="submit" disabled={!isValid || !dirty}>
+              {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
+              <Button
+                type="submit"
+                disabled={!isValid || !dirty || isLoggingIn}
+              >
+                {isLoggingIn && (
+                  <ButtonIcon>
+                    <FontAwesomeIcon icon={faCircleNotch} spin />
+                  </ButtonIcon>
+                )}
                 Inloggen
               </Button>
             </Form>
