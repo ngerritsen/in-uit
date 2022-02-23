@@ -2,17 +2,15 @@ import styled from "styled-components";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSync } from "@fortawesome/free-solid-svg-icons/faSync";
-import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 
 import Container from "./Container";
-import { getHasDirtyItems, getIsLoggedIn } from "../selectors";
+import { getIsLoggedIn } from "../selectors";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { lighten } from "polished";
 import Settings from "./Settings";
+import Status from "./Status";
 
 const Header = () => {
-  const isDirty = useSelector(getHasDirtyItems);
   const isLoggedIn = useSelector(getIsLoggedIn);
 
   return (
@@ -27,10 +25,7 @@ const Header = () => {
             <HeaderTitle>In & uit</HeaderTitle>
             {isLoggedIn && (
               <Icons>
-                <Status dirty={isDirty}>
-                  {isDirty && <FontAwesomeIcon icon={faSync} spin />}
-                  {!isDirty && <FontAwesomeIcon icon={faCheck} />}
-                </Status>
+                <Status />
                 <Settings />
               </Icons>
             )}
@@ -61,7 +56,7 @@ const Icons = styled.div`
   margin-right: ${(props) => props.theme.sizes.xxs};
 
   > *:not(:first-child) {
-    margin-left: ${(props) => props.theme.sizes.lg};
+    margin-left: ${(props) => props.theme.sizes.md};
   }
 `;
 
@@ -91,16 +86,6 @@ const HeaderContent = styled.div`
   @media screen and (min-width: ${(props) => props.theme.mobile}) {
     height: 8rem;
   }
-`;
-
-type StatusProps = {
-  dirty?: boolean;
-};
-
-const Status = styled.div<StatusProps>`
-  margin-top: -2px;
-  color: ${(props) =>
-    props.dirty ? props.theme.colors.grey : props.theme.colors.green};
 `;
 
 const HeaderTitle = styled.h1`
