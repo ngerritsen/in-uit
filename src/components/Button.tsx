@@ -5,11 +5,13 @@ type ButtonProps = {
   small?: boolean;
   warning?: boolean;
   danger?: boolean;
+  inline?: boolean;
+  subtle?: boolean;
   theme: Record<string, Record<string, string>>;
 };
 
 const Button = styled.button<ButtonProps>`
-  width: 100%;
+  width: ${(props) => (props.inline ? "auto" : "100%")};
   border: none;
   border-radius: 4px;
   font-size: 1.4rem;
@@ -37,6 +39,10 @@ function getButtonColor(props: ButtonProps) {
 
   if (props.warning) {
     return props.theme.colors.orange;
+  }
+
+  if (props.subtle) {
+    return props.theme.colors.grey;
   }
 
   return props.theme.colors.blue;

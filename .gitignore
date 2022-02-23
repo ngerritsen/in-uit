@@ -4,3 +4,8 @@ dist
 bundle.js
 .firebase
 .parcel-cache
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
+**/supabase/.env

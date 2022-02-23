@@ -1,18 +1,30 @@
-import firebase from "firebase";
+import supabase from "../supabase";
 import { Observable, Observer } from "rxjs";
 
 export function onLoginStateChange(): Observable<boolean> {
   return new Observable((observer: Observer<boolean>) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      observer.next(Boolean(user));
+    const user = supabase.auth.user();
+
+    observer.next(Boolean(user));
+
+    supabase.auth.onAuthStateChange((event) => {
+      observer.next(event !== "SIGNED_OUT");
     });
   });
 }
 
-export function login(email: string, password: string) {
-  return firebase.auth().signInWithEmailAndPassword(email, password);
+export async function login(email: string, password: string): Promise<void> {
+  const { error } = await supabase.auth.signIn({ email, password });
+
+  if (error) {
+    throw error;
+  }
 }
 
-export function logout(): Promise<void> {
-  return firebase.auth().signOut();
+export async function logout(): Promise<void> {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
 }

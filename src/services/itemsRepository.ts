@@ -1,37 +1,49 @@
-import firebase from "firebase/app";
+import supabase from "../supabase";
 import { Item } from "../types";
 
 export async function getAll() {
-  const data = [];
-  const snapshots = await getItems().get();
+  const { data, error } = await supabase.from("items").select();
 
-  snapshots.forEach((snapshot) => data.push(snapshot.data()));
+  if (error) {
+    throw error;
+  }
 
-  return data;
+  return data.map((item) => ({ ...item, itemType: item.type }));
 }
 
-export function add(item: Item) {
-  return getItems().doc(item.id).set(serializeItem(item));
+export async function add(item: Item) {
+  const { error } = await supabase.from("items").insert(serializeItem(item));
+
+  if (error) {
+    throw error;
+  }
 }
 
-export function remove(id: string) {
-  return getItems().doc(id).delete();
+export async function remove(id: string) {
+  const { error } = await supabase.from("items").delete().match({ id });
+
+  if (error) {
+    throw error;
+  }
 }
 
-export function edit(item: Item) {
-  return getItems().doc(item.id).update(serializeItem(item));
+export async function edit(item: Item) {
+  const { error } = await supabase
+    .from("items")
+    .update(serializeItem(item))
+    .match({ id: item.id });
+
+  if (error) {
+    throw error;
+  }
 }
 
-function getItems() {
-  return firebase.firestore().collection("items");
-}
-
-function serializeItem(item: Item): Item {
+function serializeItem(item: Item): Record<string, string | number | boolean> {
   return {
     amount: item.amount,
     category: item.category,
     id: item.id,
-    itemType: item.itemType,
+    type: item.itemType,
     responsible: item.responsible,
     title: item.title,
     checked: Boolean(item.checked),
