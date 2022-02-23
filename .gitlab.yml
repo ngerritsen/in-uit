@@ -1,0 +1,15 @@
+default:
+  image: node:lts
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - npm install
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - npm run test
