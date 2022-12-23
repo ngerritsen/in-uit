@@ -1,10 +1,5 @@
 import firebaseApp from "../firebase";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { Observable, Observer } from "rxjs";
 
 const auth = getAuth(firebaseApp);

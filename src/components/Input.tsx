@@ -8,10 +8,7 @@ type InputProps = {
   label: string;
 };
 
-const Input = ({
-  label,
-  ...props
-}: InputProps & FieldHookConfig<string>): JSX.Element => {
+const Input = ({ label, ...props }: InputProps & FieldHookConfig<string>): JSX.Element => {
   const [field, meta] = useField(props);
   const hasError = meta.touched && meta.error;
 
@@ -31,9 +28,7 @@ type InputFieldProps = {
 const InputField = styled.input<InputFieldProps>`
   width: 100%;
   background-color: ${(props) => props.theme.colors.background};
-  border: 1px solid
-    ${(props) =>
-      props.error ? props.theme.colors.red : props.theme.colors.border};
+  border: 1px solid ${(props) => (props.error ? props.theme.colors.red : props.theme.colors.border)};
   padding: 1rem;
   font-size: 1.4rem;
   border-radius: 4px;
@@ -41,11 +36,7 @@ const InputField = styled.input<InputFieldProps>`
 
   &:focus {
     outline: none;
-    border: 1px solid
-      ${(props) =>
-        props.error
-          ? darken(0.1, props.theme.colors.red)
-          : props.theme.colors.blue};
+    border: 1px solid ${(props) => (props.error ? darken(0.1, props.theme.colors.red) : props.theme.colors.blue)};
   }
 `;
 

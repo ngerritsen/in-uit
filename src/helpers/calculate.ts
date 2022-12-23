@@ -3,10 +3,7 @@ import { Item, Summary } from "../types";
 
 type Investments = Record<Responsible.Man | Responsible.Woman, number>;
 
-export function calculateSummary(
-  items: Item[],
-  responsible: Responsible
-): Summary {
+export function calculateSummary(items: Item[], responsible: Responsible): Summary {
   const saldos = calculateInitialSaldos(items);
   const saldo = saldos[responsible];
   const investments = calculateInvestments(saldos);
@@ -24,24 +21,13 @@ export function calculateSummary(
 
 function calculateToPay(items: Item[], responsible: Responsible): number {
   return items
-    .filter(
-      (item) =>
-        item.responsible === responsible &&
-        !item.checked &&
-        item.itemType === ItemType.Expense
-    )
+    .filter((item) => item.responsible === responsible && !item.checked && item.itemType === ItemType.Expense)
     .reduce((total, item) => total + item.amount, 0);
 }
 
-function calculateTotal(
-  items: Item[],
-  responsible: Responsible,
-  itemType: ItemType
-): number {
+function calculateTotal(items: Item[], responsible: Responsible, itemType: ItemType): number {
   return items
-    .filter(
-      (item) => item.itemType === itemType && item.responsible === responsible
-    )
+    .filter((item) => item.itemType === itemType && item.responsible === responsible)
     .reduce((total, item) => item.amount + total, 0);
 }
 
@@ -53,43 +39,26 @@ function calculateInitialSaldos(items: Item[]): Record<Responsible, number> {
   };
 }
 
-function calculateInitialSaldo(
-  items: Item[],
-  responsible: Responsible
-): number {
-  return (
-    calculateTotal(items, responsible, ItemType.Income) -
-    calculateTotal(items, responsible, ItemType.Expense)
-  );
+function calculateInitialSaldo(items: Item[], responsible: Responsible): number {
+  return calculateTotal(items, responsible, ItemType.Income) - calculateTotal(items, responsible, ItemType.Expense);
 }
 
-function calculateFinalSaldo(
-  saldo: number,
-  investments: Investments,
-  responsible: Responsible
-): number {
+function calculateFinalSaldo(saldo: number, investments: Investments, responsible: Responsible): number {
   if (responsible === Responsible.Shared) {
-    return (
-      saldo + investments[Responsible.Man] + investments[Responsible.Woman]
-    );
+    return saldo + investments[Responsible.Man] + investments[Responsible.Woman];
   }
 
   return saldo - investments[responsible];
 }
 
-function calculateInvestments(
-  saldos: Record<Responsible, number>
-): Investments {
+function calculateInvestments(saldos: Record<Responsible, number>): Investments {
   return {
     [Responsible.Man]: calculateInvestment(saldos, Responsible.Man),
     [Responsible.Woman]: calculateInvestment(saldos, Responsible.Woman),
   };
 }
 
-function calculateInvestment(
-  saldos: Record<Responsible, number>,
-  responsible: Responsible
-): number {
+function calculateInvestment(saldos: Record<Responsible, number>, responsible: Responsible): number {
   const totalSaldo = saldos[Responsible.Man] + saldos[Responsible.Woman];
   const sharedInvestmentNeeded = getNegativeAmount(saldos[Responsible.Shared]);
   const saldo = saldos[responsible];
@@ -98,7 +67,29 @@ function calculateInvestment(
     return 0;
   }
 
-  const investment = (saldo / totalSaldo) * sharedInvestmentNeeded;
+  const investments = {
+    [Responsible.Man]: (saldos[Responsible.Man] / totalSaldo) * sharedInvestmentNeeded,
+    [Responsible.Woman]: (saldos[Responsible.Woman] / totalSaldo) * sharedInvestmentNeeded,
+  };
+
+  const newSaldos = {
+    [Responsible.Man]: saldos[Responsible.Man] - investments[Responsible.Man],
+    [Responsible.Woman]: saldos[Responsible.Woman] - investments[Responsible.Woman],
+  };
+
+  const totalSaldos = newSaldos[Responsible.Man] + newSaldos[Responsible.Woman];
+
+  const thirdOfTotalSaldos = totalSaldos / 3;
+
+  if (newSaldos[Responsible.Woman] < thirdOfTotalSaldos) {
+    investments[Responsible.Man] = saldos[Responsible.Man] - thirdOfTotalSaldos * 2;
+    investments[Responsible.Woman] = saldos[Responsible.Woman] - thirdOfTotalSaldos;
+  } else if (newSaldos[Responsible.Man] < thirdOfTotalSaldos) {
+    investments[Responsible.Man] = saldos[Responsible.Man] - thirdOfTotalSaldos;
+    investments[Responsible.Woman] = saldos[Responsible.Woman] - thirdOfTotalSaldos * 2;
+  }
+
+  const investment = investments[responsible];
 
   if (investment > saldo) {
     return saldo;

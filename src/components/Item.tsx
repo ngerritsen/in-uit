@@ -61,11 +61,7 @@ const Item = ({
 
   return (
     <ItemContainer>
-      <ItemContent
-        dirty={showDirty}
-        calculated={calculated}
-        additional={additional}
-      >
+      <ItemContent dirty={showDirty} calculated={calculated} additional={additional}>
         {!calculated && itemType === ItemType.Expense && (
           <ItemCheckIcon
             checked={checked}
@@ -142,8 +138,7 @@ type ItemCheckIconProps = {
 };
 
 const ItemCheckIcon = styled.div<ItemCheckIconProps>`
-  color: ${(props) =>
-    props.checked ? props.theme.colors.blue : props.theme.colors.grey};
+  color: ${(props) => (props.checked ? props.theme.colors.blue : props.theme.colors.grey)};
   margin-right: ${(props) => props.theme.sizes.sm};
   font-size: 1.1em;
   cursor: pointer;
@@ -152,8 +147,7 @@ const ItemCheckIcon = styled.div<ItemCheckIconProps>`
 
 const ItemTitle = styled.div`
   flex-grow: 1;
-  font-weight: ${(props) =>
-    props.itemType === ItemType.Saldo ? "bold" : "regular"};
+  font-weight: ${(props) => (props.itemType === ItemType.Saldo ? "bold" : "regular")};
   margin-right: ${(props) => props.theme.sizes.sm};
 `;
 
@@ -163,8 +157,7 @@ type ItemAmountProps = {
 
 const ItemAmount = styled.div<ItemAmountProps>`
   margin-right: ${(props) => props.theme.sizes.sm};
-  font-weight: ${(props) =>
-    props.itemType === ItemType.Saldo ? "bold" : "regular"};
+  font-weight: ${(props) => (props.itemType === ItemType.Saldo ? "bold" : "regular")};
   color: ${(props) => {
     switch (props.itemType) {
       case ItemType.Expense:
@@ -172,9 +165,7 @@ const ItemAmount = styled.div<ItemAmountProps>`
       case ItemType.Income:
         return props.theme.colors.green;
       case ItemType.Saldo:
-        return props.negative
-          ? props.theme.colors.red
-          : props.theme.colors.foreground;
+        return props.negative ? props.theme.colors.red : props.theme.colors.foreground;
     }
   }};
 `;

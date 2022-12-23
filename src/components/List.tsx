@@ -22,12 +22,8 @@ type ListProps = {
 };
 
 const List = ({ itemType, responsible }: ListProps) => {
-  const summary = useSelector((state: RootState) =>
-    getSummmary(state, itemType, responsible)
-  );
-  const groupedItems = useSelector((state: RootState) =>
-    getGroupedItems(state, itemType, responsible)
-  );
+  const summary = useSelector((state: RootState) => getSummmary(state, itemType, responsible));
+  const groupedItems = useSelector((state: RootState) => getGroupedItems(state, itemType, responsible));
 
   return (
     <div>
@@ -35,10 +31,7 @@ const List = ({ itemType, responsible }: ListProps) => {
         {groupedItems.reduce(
           (items, category) => [
             ...items,
-            <CategoryHeading
-              key={category.id}
-              title={getCategoryName(category.id)}
-            />,
+            <CategoryHeading key={category.id} title={getCategoryName(category.id)} />,
             ...category.items.map((item) => (
               <Item
                 key={item.id}
@@ -109,12 +102,7 @@ const List = ({ itemType, responsible }: ListProps) => {
                 calculated
               />
             )}
-            <Item
-              itemType={ItemType.Saldo}
-              title="Saldo"
-              amount={summary.saldo}
-              responsible={responsible}
-            />
+            <Item itemType={ItemType.Saldo} title="Saldo" amount={summary.saldo} responsible={responsible} />
           </>
         )}
       </Section>
@@ -127,11 +115,7 @@ const List = ({ itemType, responsible }: ListProps) => {
           )}
           content={({ close }) => (
             <Modal close={close}>
-              <ItemForm
-                responsible={responsible}
-                itemType={itemType}
-                onExit={close}
-              />
+              <ItemForm responsible={responsible} itemType={itemType} onExit={close} />
             </Modal>
           )}
         />

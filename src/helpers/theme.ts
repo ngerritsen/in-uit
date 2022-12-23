@@ -6,9 +6,7 @@ export function onDarkModeChange(listener: (matches: boolean) => void) {
     return;
   }
 
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addListener((event) => listener(event.matches));
+  window.matchMedia("(prefers-color-scheme: dark)").addListener((event) => listener(event.matches));
 }
 
 export function isInDarkMode() {

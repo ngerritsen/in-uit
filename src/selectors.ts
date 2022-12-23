@@ -6,33 +6,18 @@ import { calculateSummary } from "./helpers/calculate";
 
 export const getItems = (state: RootState): Item[] => state.items.items;
 
-export const getHasDirtyItems = (state: RootState): boolean =>
-  Boolean(state.items.items.some((item) => item.dirty));
+export const getHasDirtyItems = (state: RootState): boolean => Boolean(state.items.items.some((item) => item.dirty));
 
-export const getIsLoggedIn = (state: RootState): boolean =>
-  state.authentication.loggedIn;
+export const getIsLoggedIn = (state: RootState): boolean => state.authentication.loggedIn;
 
-export const getIsLoggingIn = (state: RootState): boolean =>
-  state.authentication.loggingIn;
+export const getIsLoggingIn = (state: RootState): boolean => state.authentication.loggingIn;
 
-export const getIsLoggingOut = (state: RootState): boolean =>
-  state.authentication.loggingOut;
+export const getIsLoggingOut = (state: RootState): boolean => state.authentication.loggingOut;
 
-export const getLoginError = (state: RootState): string =>
-  state.authentication.loginError;
+export const getLoginError = (state: RootState): string => state.authentication.loginError;
 
-export const getGroupedItems = (
-  state: RootState,
-  itemType: ItemType,
-  responsible: Responsible
-): Category[] =>
+export const getGroupedItems = (state: RootState, itemType: ItemType, responsible: Responsible): Category[] =>
   helpers.getGroupedItems(getItems(state), itemType, responsible);
 
-export const getSummmary = (
-  state: RootState,
-  itemType: ItemType,
-  responsible: Responsible
-): Summary | null =>
-  itemType === ItemType.Expense
-    ? calculateSummary(getItems(state), responsible)
-    : null;
+export const getSummmary = (state: RootState, itemType: ItemType, responsible: Responsible): Summary | null =>
+  itemType === ItemType.Expense ? calculateSummary(getItems(state), responsible) : null;

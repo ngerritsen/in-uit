@@ -10,11 +10,7 @@ type SelectProps = {
   children: JSX.Element | JSX.Element[];
 };
 
-const Select = ({
-  label,
-  children,
-  ...props
-}: SelectProps & FieldHookConfig<string>) => {
+const Select = ({ label, children, ...props }: SelectProps & FieldHookConfig<string>) => {
   const [field, meta] = useField(props);
   const hasError = meta.touched && meta.error;
 
@@ -36,11 +32,7 @@ type SelectFieldProps = {
 const SelectField = styled.select<SelectFieldProps>`
   width: 100%;
   background-color: ${(props) => props.theme.colors.background};
-  border: 1px solid
-    ${(props) =>
-      props.error
-        ? props.theme.colors.red
-        : darken(0.15, props.theme.colors.border)};
+  border: 1px solid ${(props) => (props.error ? props.theme.colors.red : darken(0.15, props.theme.colors.border))};
   height: 4rem;
   font-size: 1.4rem;
   border-radius: 4px;
@@ -52,11 +44,7 @@ const SelectField = styled.select<SelectFieldProps>`
 
   &:focus {
     outline: none;
-    border: 1px solid
-      ${(props) =>
-        props.error
-          ? darken(0.1, props.theme.colors.red)
-          : props.theme.colors.blue};
+    border: 1px solid ${(props) => (props.error ? darken(0.1, props.theme.colors.red) : props.theme.colors.blue)};
   }
 `;
 

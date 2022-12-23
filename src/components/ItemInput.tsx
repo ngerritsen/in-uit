@@ -1,15 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ItemInput = ({
-  action,
-  id,
-  itemType,
-  responsible,
-  actionText,
-  title,
-  amount,
-}) => {
+const ItemInput = ({ action, id, itemType, responsible, actionText, title, amount }) => {
   let amountInput, titleInput;
 
   return (
@@ -48,14 +40,7 @@ const ItemInput = ({
   );
 };
 
-function submitItem(
-  action,
-  amountInput,
-  titleInput,
-  itemType,
-  responsible,
-  id
-) {
+function submitItem(action, amountInput, titleInput, itemType, responsible, id) {
   const amount = amountInput.value;
   const title = titleInput.value;
   const item = {

@@ -24,8 +24,7 @@ type StatusIconProps = {
 
 const StatusIcon = styled.div<StatusIconProps>`
   margin-top: -2px;
-  color: ${(props) =>
-    props.dirty ? props.theme.colors.grey : props.theme.colors.green};
+  color: ${(props) => (props.dirty ? props.theme.colors.grey : props.theme.colors.green)};
 `;
 
 export default Status;

@@ -45,10 +45,7 @@ const Login = () => {
                 <Input type="password" name="password" label="Wachtwoord" />
               </Section>
               {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
-              <Button
-                type="submit"
-                disabled={!isValid || !dirty || isLoggingIn}
-              >
+              <Button type="submit" disabled={!isValid || !dirty || isLoggingIn}>
                 {isLoggingIn && (
                   <ButtonIcon>
                     <FontAwesomeIcon icon={faCircleNotch} spin />

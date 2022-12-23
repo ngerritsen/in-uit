@@ -94,11 +94,7 @@ const ItemForm = ({
               </ButtonPairButton>
               {editMode && (
                 <ButtonPairButton>
-                  <Button
-                    onClick={() => dispatch(removeItem(id))}
-                    type="button"
-                    danger
-                  >
+                  <Button onClick={() => dispatch(removeItem(id))} type="button" danger>
                     Verwijderen
                   </Button>
                 </ButtonPairButton>
@@ -124,11 +120,7 @@ const ButtonPairButton = styled.div`
   }
 `;
 
-function generateTitle(
-  responsible: Responsible,
-  itemType: ItemType,
-  editMode: boolean
-): string {
+function generateTitle(responsible: Responsible, itemType: ItemType, editMode: boolean): string {
   return capitalize(
     (responsible === Responsible.Shared ? "gezamelijke " : "") +
       (itemType === ItemType.Income ? "inkomst " : "uitgave ") +

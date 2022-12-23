@@ -49,9 +49,7 @@ export default createReducer<ItemsState>(initialState, (builder) => {
       state.items = updateItem(state.items, action.payload, markClean);
     })
     .addCase(actions.editItemFailed, (state, action) => {
-      state.items = updateItem(state.items, action.payload, (item) =>
-        markClean(item._previousVersion || item)
-      );
+      state.items = updateItem(state.items, action.payload, (item) => markClean(item._previousVersion || item));
     });
 });
 
@@ -59,12 +57,7 @@ function updateItem(items: Item[], id: string, updater: (item: Item) => Item) {
   return updateItems(items, "id", id, updater);
 }
 
-function updateItems(
-  items: Item[],
-  property: string,
-  value: string,
-  updater: (item: Item) => Item
-) {
+function updateItems(items: Item[], property: string, value: string, updater: (item: Item) => Item) {
   return items.map((item) => (item[property] === value ? updater(item) : item));
 }
 
