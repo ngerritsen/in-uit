@@ -8,6 +8,13 @@ export const getItems = (state: RootState): Item[] => state.items.items;
 
 export const getHasDirtyItems = (state: RootState): boolean => Boolean(state.items.items.some((item) => item.dirty));
 
+export const getIsLoading = (state: RootState): boolean =>
+  (getIsLoggingIn(state) && !getIsItemsInitialized(state)) || !getIsAuthInitialized(state);
+
+export const getIsAuthInitialized = (state: RootState): boolean => state.authentication.initialized;
+
+export const getIsItemsInitialized = (state: RootState): boolean => state.items.initialized;
+
 export const getIsLoggedIn = (state: RootState): boolean => state.authentication.loggedIn;
 
 export const getIsLoggingIn = (state: RootState): boolean => state.authentication.loggingIn;

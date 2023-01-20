@@ -1,10 +1,10 @@
 import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { catchError, mapTo, mergeMap, mergeMapTo, withLatestFrom } from "rxjs/operators";
-import { getIsLoggedIn } from "../selectors";
+import { getIsAuthInitialized, getIsLoggedIn } from "../selectors";
 import * as authenticationService from "../services/authenticationService";
 import * as actions from "../actions";
 import { RootState } from "../store";
-import { empty, EMPTY, from, of } from "rxjs";
+import { from, of } from "rxjs";
 import { Action } from "redux";
 import { PayloadAction } from "@reduxjs/toolkit";
 
@@ -12,20 +12,23 @@ export const authenticationStateChangeEpic = (_: unknown, state$: StateObservabl
   authenticationService.onLoginStateChange().pipe(
     withLatestFrom(state$),
     mergeMap(([loggedIn, state]: [boolean, RootState]) => {
+      const nextActions = [];
+
+      if (!getIsAuthInitialized(state)) {
+        nextActions.push(actions.initializeAuth());
+      }
+
       if (loggedIn && !getIsLoggedIn(state)) {
-        return of(actions.loginSucceeded(), actions.getAllItems());
+        nextActions.push(actions.loginSucceeded(), actions.getAllItems());
       }
 
       if (!loggedIn && getIsLoggedIn(state)) {
-        return of(actions.logoutSucceeded());
+        nextActions.push(actions.logoutSucceeded());
       }
 
-      return EMPTY;
+      return of(...nextActions);
     })
   );
-
-export const initiallyLoggedInEpic = (_: unknown, state$: StateObservable<RootState>) =>
-  getIsLoggedIn(state$.value) ? of(actions.getAllItems()) : empty();
 
 export const loginEpic = (action$: ActionsObservable<Action>) =>
   action$.pipe(

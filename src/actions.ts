@@ -9,6 +9,7 @@ export type LoginPayload = {
 export const login = createAction<LoginPayload>("authentication/login");
 export const loginSucceeded = createAction("authentication/loginSucceeded");
 export const loginFailed = createAction<Error>("authentication/loginFailed");
+export const initializeAuth = createAction<Error>("authentication/initializeAuth");
 
 export const logout = createAction("authentication/logout");
 export const logoutSucceeded = createAction("authentication/logoutSucceeded");

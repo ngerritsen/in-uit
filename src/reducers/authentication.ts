@@ -3,6 +3,7 @@ import * as actions from "../actions";
 import { isLoggedIn } from "../services/authenticationService";
 
 type AuthenticationState = {
+  initialized: boolean;
   loggedIn: boolean;
   loggingIn: boolean;
   loggingOut: boolean;
@@ -11,6 +12,7 @@ type AuthenticationState = {
 };
 
 const initialState: AuthenticationState = {
+  initialized: false,
   loggedIn: isLoggedIn(),
   loggingIn: false,
   loggingOut: false,
@@ -22,6 +24,9 @@ export default createReducer<AuthenticationState>(initialState, (builder) => {
   builder
     .addCase(actions.login, (state) => {
       state.loggingIn = true;
+    })
+    .addCase(actions.initializeAuth, (state) => {
+      state.initialized = true;
     })
     .addCase(actions.loginSucceeded, (state) => {
       state.loggingIn = false;

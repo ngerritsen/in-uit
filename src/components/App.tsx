@@ -6,12 +6,14 @@ import MainView from "./MainView";
 import Header from "./Header";
 import Login from "./Login";
 import { getTheme, isInDarkMode, onDarkModeChange } from "../helpers/theme";
-import { getIsLoggedIn } from "../selectors";
+import { getIsLoggedIn, getIsLoading } from "../selectors";
 import { Theme } from "../types";
+import Loader from "./Loader";
 
 const App = () => {
   const [useDarkMode, setUseDarkMode] = useState(isInDarkMode());
   const isLoggedIn = useSelector(getIsLoggedIn);
+  const isLoading = useSelector(getIsLoading);
 
   useEffect(() => {
     onDarkModeChange((shouldUseDarkMode: boolean) => {
@@ -25,6 +27,10 @@ const App = () => {
     <ThemeProvider theme={getTheme(useDarkMode)}>
       <Header />
       {(() => {
+        if (isLoading) {
+          return <Loader />;
+        }
+
         if (!isLoggedIn) {
           return <Login />;
         }

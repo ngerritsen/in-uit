@@ -13,7 +13,8 @@ import Input from "./Input";
 import Select from "./Select";
 import { capitalize } from "../helpers/formatting";
 import { Responsible, ItemType } from "../constants";
-
+import ToggleContent from "./ToggleContent";
+import Modal from "./Modal";
 type ItemFormProps = {
   id?: string;
   title?: string;
@@ -89,16 +90,38 @@ const ItemForm = ({
           </Section>
           <Section>
             <ButtonPair>
+              {editMode && (
+                <ToggleContent
+                  toggle={({ open }) => (
+                    <ButtonPairButton>
+                      <Button onClick={open} type="button" danger>
+                        Verwijderen
+                      </Button>
+                    </ButtonPairButton>
+                  )}
+                  content={({ close }) => (
+                    <Modal close={close}>
+                      <Title>Weet je het zeker?</Title>
+                      <p>Weet je zeker dat je &quot;{title}&quot; wil verwijderen?</p>
+                      <ButtonPair>
+                        <ButtonPairButton>
+                          <Button subtle onClick={close}>
+                            Annuleren
+                          </Button>
+                        </ButtonPairButton>
+                        <ButtonPairButton>
+                          <Button onClick={() => dispatch(removeItem(id))} danger>
+                            Verwijderen
+                          </Button>
+                        </ButtonPairButton>
+                      </ButtonPair>
+                    </Modal>
+                  )}
+                />
+              )}
               <ButtonPairButton>
                 <Button disabled={!isValid && dirty}>Opslaan</Button>
               </ButtonPairButton>
-              {editMode && (
-                <ButtonPairButton>
-                  <Button onClick={() => dispatch(removeItem(id))} type="button" danger>
-                    Verwijderen
-                  </Button>
-                </ButtonPairButton>
-              )}
             </ButtonPair>
           </Section>
         </Form>
